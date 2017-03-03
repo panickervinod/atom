@@ -3582,7 +3582,10 @@ class TextEditor extends Model
       @doubleWidthCharWidth = doubleWidthCharWidth
       @halfWidthCharWidth = halfWidthCharWidth
       @koreanCharWidth = koreanCharWidth
-      @displayLayer.reset({}) if @isSoftWrapped() and @getEditorWidthInChars()?
+      if @isSoftWrapped()
+        @displayLayer.reset({
+          softWrapColumn: @getSoftWrapColumn()
+        })
     defaultCharWidth
 
   setHeight: (height, reentrant=false) ->
@@ -3600,8 +3603,8 @@ class TextEditor extends Model
 
   getAutoWidth: -> @autoWidth ? false
 
-  setWidth: (width, reentrant=false) ->
-    if reentrant
+  setWidth: (width, fromComponent=false) ->
+    if fromComponent
       @update({width})
       @width
     else
